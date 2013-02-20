@@ -1,0 +1,4 @@
+#!/bin/bash
+
+
+cat uja-access.log | `which php` httpd-log-parser.php
