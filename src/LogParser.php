@@ -24,7 +24,7 @@ class N7_LogParser
 			//read the line and parse it
 			$line = $this->source->read();
 			$c = $this->creator;
-			$entry = $c::create($line);
+			$entry = call_user_func(array("$c", 'create'), $line);
 			
 			if ($entry)
 			{
