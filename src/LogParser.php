@@ -23,15 +23,24 @@ class N7_LogParser
 		{
 			//read the line and parse it
 			$line = $this->source->read();
-			$c = $this->creator;
-			$entry = call_user_func(array("$c", 'create'), $line);
+			
+			//ignore blank lines
+			$line = trim($line);
+			if (empty($line))
+			{
+    			continue;
+			}
+			
+			$entry = call_user_func(array("{$this->creator}", 'create'), $line);
 			
 			if ($entry)
 			{
 				$this->proc->write($entry);
 			}
-			
-			$this->logger->debug($line);
+			else
+			{
+    			$this->logger->info("The line '$line' could not be parsed correctly.");
+			}
 		}
 	}
 	
