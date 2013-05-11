@@ -5,7 +5,7 @@ class N7_Processor_Mongo implements N7_ProcessorInterface
 	protected $mongo;
 	protected $db;
 	protected $col;
-	protected $serverId;
+	protected $attribs;
 	
 	protected $timeout;
 	protected $logger;
@@ -15,7 +15,7 @@ class N7_Processor_Mongo implements N7_ProcessorInterface
 		$db = 'log',
 		$collection = 'log',
 		N7_Psr_LoggerInterface $logger,
-		$serverId = null,
+		array $attribs = array(),
 		$timeout = 60
 	)
 	{
@@ -34,8 +34,7 @@ class N7_Processor_Mongo implements N7_ProcessorInterface
 				$this->db = $this->mongo->selectDB($db);
 				$this->col = $this->db->$collection;
 				
-				if ($serverId)
-					$this->serverId = $serverId;
+				$this->attribs = $attribs;
 				
 				$connected = true;
 			}
@@ -70,8 +69,13 @@ class N7_Processor_Mongo implements N7_ProcessorInterface
 				$map[$key] = utf8_encode($val);
 		}
 		
-		if ($this->serverId)
-		  $map['server_id'] = utf8_encode($this->serverId);
+		if (count($this->attribs))
+		{
+			foreach ($this->attribs as $key => $value)
+			{
+				$map[$key] = utf8_encode($value);
+			}
+		}
 		
 		//make a few tweaks
 		$map['timestamp'] = new MongoDate($map['timestamp']);
