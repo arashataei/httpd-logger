@@ -18,6 +18,8 @@ class N7_LogParser
 		$this->creator = get_class($entry);
 		$this->logger = $logger;
 		
+		$this->logger->info("Started httpd log listener (PID:" . getmypid() . ')');
+		
 		//the listener
 		while ($this->source->hasMore())
 		{
@@ -42,6 +44,8 @@ class N7_LogParser
     			$this->logger->info("The line '$line' could not be parsed correctly.");
 			}
 		}
+		
+		$this->logger->info("Shutting down httpd log listener (PID:" . getmypid() . ')');
 	}
 	
 }
